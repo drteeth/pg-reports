@@ -101,6 +101,13 @@ create view report_overall as
   );
 ```
 
+```sql
+select * from report_overall;
+ overall | jan | feb | mar | apr | may | jun | jul | aug | sep | oct | nov | dec | ytd
+---------+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----
+ overall |   2 |   1 |   2 |     |   1 |   2 |   1 |   4 |     |   4 |   2 |   1 |  20
+```
+
 add breakdown by reason, also clean up with Common table expressions
 
 ```sql
@@ -215,7 +222,6 @@ select * from report_rejection_reasons;
  0      |   1 |     |   2 |     |     |     |     |   1 |     |   2 |   2 |     |   8
  1      |   1 |     |     |     |   1 |   1 |     |   1 |     |   1 |     |     |   5
  2      |     |   1 |     |     |     |   1 |   1 |   2 |     |   1 |     |   1 |   7
-(3 rows)
 ```
 
 ![rejections by reason](https://raw.githubusercontent.com/drteeth/pg-reports/master/rejections_by_reason.png)
