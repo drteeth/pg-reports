@@ -58,7 +58,7 @@ create view report_overall as
 select * from report_overall;
  overall | jan | feb | mar | apr | may | jun | jul | aug | sep | oct | nov | dec
 ---------+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----
- overall |   2 |   2 |   1 |   4 |   2 |     |   2 |   4 |     |     |     |   3
+ overall |   2 |   1 |   2 |     |   1 |   2 |   1 |   4 |     |   4 |   2 |   1
 ```
 
 add YTD
