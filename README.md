@@ -159,6 +159,15 @@ create view report_rejection_reasons as
   );
 ```
 
+```sql
+select * from report_rejection_reasons;
+ reason | jan | feb | mar | apr | may | jun | jul | aug | sep | oct | nov | dec | ytd
+--------+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----
+ 0      |   1 |     |   2 |     |     |     |     |   1 |     |   2 |   2 |     |   8
+ 1      |   1 |     |     |     |   1 |   1 |     |   1 |     |   1 |     |     |   5
+ 2      |     |   1 |     |     |     |   1 |   1 |   2 |     |   1 |     |   1 |   7
+```
+
 ## Use in rails:
 ```ruby
 class RejectionReasonReport < ActiveRecord::Base
@@ -213,15 +222,6 @@ end
     <% end %>
   </tbody>
 </table>
-```
-
-```sql
-select * from report_rejection_reasons;
- reason | jan | feb | mar | apr | may | jun | jul | aug | sep | oct | nov | dec | ytd
---------+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----
- 0      |   1 |     |   2 |     |     |     |     |   1 |     |   2 |   2 |     |   8
- 1      |   1 |     |     |     |   1 |   1 |     |   1 |     |   1 |     |     |   5
- 2      |     |   1 |     |     |     |   1 |   1 |   2 |     |   1 |     |   1 |   7
 ```
 
 ![rejections by reason](https://raw.githubusercontent.com/drteeth/pg-reports/master/rejections_by_reason.png)
