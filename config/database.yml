@@ -1,0 +1,18 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: 5
+
+development:
+  <<: *default
+  database: pg_reports_development
+
+test:
+  <<: *default
+  database: pg_reports_test
+
+production:
+  <<: *default
+  database: pg_reports_production
+  username: PgReports
+  password: <%= ENV['PGREPORTS_DATABASE_PASSWORD'] %>

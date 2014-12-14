@@ -1,0 +1,26 @@
+<table>
+  <thead>
+    <th></th>
+    <th>Jan</th>
+    <th>Jan</th>
+    <th>Jan</th>
+    <th>Jan</th>
+    <th>Jan</th>
+    <th>Jan</th>
+    <th>Jan</th>
+    <th>Jan</th>
+    <th>Jan</th>
+    <th>Jan</th>
+    <th>Jan</th>
+    <th>Jan</th>
+  </thead>
+  <tbody>
+    <% @report.each do |row| %>
+      <tr>
+        <% row.each_column do |col| %>
+          <td><%= col %></td>
+        <% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

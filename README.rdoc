@@ -1,0 +1,145 @@
+rails new . -d postgresql
+
+# create a posts model
+bin/rails g model Post body:text
+
+# create a rejections model
+bin/rails g model Rejection post:references reason:integer
+
+# add seed data
+# add gem 'hipsteripsum' to gemfile
+
+# add to db/seeds.rb
+20.times.map { Lorem::Base.new(:paragraphs, 1).output }
+        .map { |text| Post.create! body:text }
+        .map { |post| Rejection.create! post:post, reason:rand(2) }
+
+bin/rake db:migrate db:seed
+
+# create a migration for tablefuncs
+
+bin/rails g migration add_extensions
+class AddExtensions < ActiveRecord::Migration
+  def up
+    execute 'create extension if not exists tablefunc;'
+  end
+
+  def down
+    execute 'drop extension if exists tablefunc;'
+  end
+
+end
+
+bin/rails g migration create_overall_report
+
+explain crosstab basics
+explain crosstab with 2 args
+
+class CreateOverallReport < ActiveRecord::Migration
+
+  def up
+    execute <<-SQL
+      create view overall as
+        select      count(rejections.id),
+                    date_part('month', rejections.created_at) as month
+        from        rejections
+        where       date_part('year', rejections.created_at) = date_part('year', current_date)
+        group by    date_part('month', rejections.created_at);
+
+      create view report_overall as
+        select * from crosstab(
+          'select ''overall'', month, count from overall',
+          'select m from generate_series(1,12) m'
+        ) as (
+          "overall" text,
+          "jan" int,
+          "feb" int,
+          "mar" int,
+          "apr" int,
+          "may" int,
+          "jun" int,
+          "jul" int,
+          "aug" int,
+          "sep" int,
+          "oct" int,
+          "nov" int,
+          "dec" int
+        );
+    SQL
+  end
+
+  def down
+    execute 'drop view if exists report_overall'
+    execute 'drop view if exists overall'
+  end
+
+end
+
+bin/rake db:migate
+
+bin/rails db
+select * from report_overall;
+ overall | jan | feb | mar | apr | may | jun | jul | aug | sep | oct | nov | dec
+---------+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----
+ overall |   2 |   2 |   1 |   4 |   2 |     |   2 |   4 |     |     |     |   3
+
+
+add YTD
+talk about union, matching column output
+
+bin/rails g migration add_ytd_to_overall
+
+ class AddYtdToOverall < ActiveRecord::Migration
+
+  def up
+    execute <<-SQL
+      drop view if exists overall;
+      drop view if exists report_overall;
+
+      create view overall as
+        select      count(rejections.id),
+                    date_part('month', rejections.created_at) as month
+        from        rejections
+        where       date_part('year', rejections.created_at) = date_part('year', current_date)
+        group by    date_part('month', rejections.created_at)
+
+        union
+
+        select      count(rejections.id),
+                    13 as month
+        from        rejections
+        where       date_part('year', rejections.created_at) = date_part('year', current_date);
+
+
+      create view report_overall as
+        select * from crosstab(
+          'select ''overall'', month, count from overall',
+          'select m from generate_series(1,13) m'
+        ) as (
+          "overall" text,
+          "jan" int,
+          "feb" int,
+          "mar" int,
+          "apr" int,
+          "may" int,
+          "jun" int,
+          "jul" int,
+          "aug" int,
+          "sep" int,
+          "oct" int,
+          "nov" int,
+          "dec" int,
+          "ytd" int
+        );
+    SQL
+  end
+
+  def down
+    execute 'drop view if exists report_overall'
+    execute 'drop view if exists overall'
+  end
+
+end
+
+
+bin/rake db:migrate
