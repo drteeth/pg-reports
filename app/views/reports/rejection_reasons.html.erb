@@ -2,21 +2,23 @@
   <thead>
     <th></th>
     <th>Jan</th>
-    <th>Jan</th>
-    <th>Jan</th>
-    <th>Jan</th>
-    <th>Jan</th>
-    <th>Jan</th>
-    <th>Jan</th>
-    <th>Jan</th>
-    <th>Jan</th>
-    <th>Jan</th>
-    <th>Jan</th>
-    <th>Jan</th>
+    <th>Feb</th>
+    <th>Mar</th>
+    <th>Apr</th>
+    <th>May</th>
+    <th>Jun</th>
+    <th>Jul</th>
+    <th>Aug</th>
+    <th>Sep</th>
+    <th>Oct</th>
+    <th>Nov</th>
+    <th>Dec</th>
+    <th>YTD</th>
   </thead>
   <tbody>
     <% @report.each do |row| %>
       <tr>
+        <td><%= row.reason_text %></td>
         <% row.each_column do |col| %>
           <td><%= col %></td>
         <% end %>

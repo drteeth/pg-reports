@@ -6,23 +6,30 @@ class CreateRejectionReport < ActiveRecord::Migration
       drop view if exists report_rejection_reasons;
 
       create view rejection_reasons as
-        select      count(rejections.id),
-                    reason,
-                    date_part('month', rejections.created_at) as month
-        from        rejections
-        where       date_part('year', rejections.created_at) = date_part('year', current_date)
-        group by    reason,
-                    date_part('month', rejections.created_at)
+        with
 
+        monthly as (
+          select      count(rejections.id),
+                      reason,
+                      date_part('month', rejections.created_at) as month
+          from        rejections
+          where       date_part('year', rejections.created_at) = date_part('year', current_date)
+          group by    reason,
+                      date_part('month', rejections.created_at)
+        ),
+
+        yearly as (
+          select      count(rejections.id),
+                      reason,
+                      13 as month
+          from        rejections
+          where       date_part('year', rejections.created_at) = date_part('year', current_date)
+          group by    reason
+        )
+
+        select * from monthly
         union
-
-        select      count(rejections.id),
-                    reason,
-                    13 as month
-        from        rejections
-        where       date_part('year', rejections.created_at) = date_part('year', current_date)
-        group by    reason;
-
+        select * from yearly;
 
       create view report_rejection_reasons as
         select * from crosstab(
