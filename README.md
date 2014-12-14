@@ -217,3 +217,5 @@ select * from report_rejection_reasons;
  2      |     |   1 |     |     |     |   1 |   1 |   2 |     |   1 |     |   1 |   7
 (3 rows)
 ```
+
+![rejections by reason](https://raw.githubusercontent.com/drteeth/pg-reports/master/rejections_by_reason.png)
